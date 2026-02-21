@@ -1,0 +1,94 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}Technical Specifications - ByDrive{% endblock %}
+
+{% block content %}
+
+<!-- TECHNICAL SPECS HEADER -->
+<section class="page-header">
+  <h1>All technical specifications</h1>
+</section>
+
+<!-- TECH SPECS CONTENT -->
+<section class="tech-specs-section">
+  <div class="tech-specs-grid">
+    <!-- Engine Specs -->
+    <div class="tech-card">
+      <h2><i class="fas fa-engine"></i> Engine</h2>
+      <ul class="spec-list">
+        <li><span>Engine:</span> {{ car.engine }}</li>
+        <li><span>Power:</span> {{ car.power }}</li>
+        <li><span>Transmission:</span> {{ car.get_transmission_display }}</li>
+        <li><span>Drivetrain:</span> {{ car.get_drivetrain_display }}</li>
+      </ul>
+    </div>
+
+    <!-- Fuel & Consumption -->
+    <div class="tech-card">
+      <h2><i class="fas fa-gas-pump"></i> Fuel</h2>
+      <ul class="spec-list">
+        <li><span>Fuel Type:</span> {{ car.get_fuel_type_display }}</li>
+        {% if car.consumption %}
+        <li><span>Consumption:</span> {{ car.consumption }}</li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <!-- Dimensions & Capacity -->
+    <div class="tech-card">
+      <h2><i class="fas fa-chair"></i> Capacity</h2>
+      <ul class="spec-list">
+        <li><span>Number of seats:</span> {{ car.seats }}</li>
+        <li><span>Model Year:</span> {{ car.model_year }}</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH SECTION -->
+<section class="search-section">
+  <h2>by<span>drive</span></h2>
+  <h3>All Cars</h3>
+  
+  <div class="search-bar large">
+    <form action="{% url 'search' %}" method="GET">
+      <i class="fas fa-search"></i>
+      <input type="text" name="q" placeholder="Enter car brand or model to search">
+      <button type="submit" class="btn">Search</button>
+    </form>
+  </div>
+</section>
+
+<!-- TECH SPECS CARS LIST -->
+<section class="cars-section">
+  <h3>Available Cars</h3>
+  <div class="cars-grid vertical">
+    {% for car in all_cars %}
+    <div class="car-card horizontal tech-spec-card">
+      <img src="{{ car.main_image }}" alt="{{ car.name }}">
+      <div class="car-info">
+        <h3>{{ car.brand.name }} {{ car.name }}</h3>
+        <p class="price-tag">${{ car.daily_price }} / day</p>
+        <div class="features-tags">
+          <span>{{ car.brand.name }}</span>
+          <span>{{ car.get_drivetrain_display }} - {{ car.get_transmission_display }}</span>
+        </div>
+        <a href="{% url 'car-detail' car.id %}" class="btn-small">View Details</a>
+      </div>
+    </div>
+    {% empty %}
+    <p>No cars available</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="cta-content">
+    <h3>The largest car sharing & rental marketplace</h3>
+    <p>Drive your dream car down the stylish streets</p>
+    <a href="{% url 'all-cars' %}" class="btn big">Explore All Cars</a>
+  </div>
+</section>
+
+{% endblock %}

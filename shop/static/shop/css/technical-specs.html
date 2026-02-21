@@ -1,0 +1,131 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}Technical Specifications - ByDrive{% endblock %}
+
+{% block content %}
+
+<!-- TECHNICAL SPECS HEADER -->
+<section class="page-header">
+  <h1>All technical specifications</h1>
+</section>
+
+<!-- TECH SPECS CONTENT -->
+<section class="tech-specs-section">
+  <div class="tech-specs-grid">
+    <!-- 2 Seats Section -->
+    <div class="tech-card">
+      <h2><i class="fas fa-chair"></i> 2 Seats</h2>
+      <ul class="spec-list">
+        <li><span>Number of seats:</span> 27-28</li>
+        <li><span>Consumption:</span> 4.0L F4 24V DOHC</li>
+        <li><span>Engine:</span> Exterior and interior</li>
+      </ul>
+    </div>
+
+    <!-- Gasoline Section -->
+    <div class="tech-card">
+      <h2><i class="fas fa-gas-pump"></i> Gasoline</h2>
+      <ul class="spec-list">
+        <li><span>Fuel Type:</span> 7-Speed Automatic</li>
+        <li><span>Transmission:</span> 502 hp</li>
+        <li><span>Power:</span> AWD</li>
+        <li><span>Drivetrain:</span> Automatic</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH SECTION -->
+<section class="search-section">
+  <h2>by<span>drive</span></h2>
+  <h3>All Cars</h3>
+  
+  <div class="search-bar large">
+    <form action="{% url 'search' %}" method="GET">
+      <i class="fas fa-search"></i>
+      <input type="text" name="q" placeholder="Enter car brand or model to search">
+      <button type="submit" class="btn">Search</button>
+    </form>
+  </div>
+</section>
+
+<!-- TECH SPECS CARS LIST -->
+<section class="cars-section">
+  <div class="cars-grid vertical">
+    <!-- Audi S4 Premium Plus -->
+    <div class="car-card horizontal tech-spec-card">
+      <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?q=80&w=400" alt="Audi S4">
+      <div class="car-info">
+        <h3>Audi S4 Premium Plus</h3>
+        <p class="price-tag">$38 / day</p>
+        <div class="features-tags">
+          <span>Subaru Forester Plus</span>
+          <span>AWD - Automatic</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BMW X3 Sport package -->
+    <div class="car-card horizontal tech-spec-card">
+      <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400" alt="BMW X3">
+      <div class="car-info">
+        <h3>BMW X3 Sport package</h3>
+        <p class="price-tag">$48 / day</p>
+        <div class="features-tags">
+          <span>BMW X3 Sport Package</span>
+          <span>AWD - Automatic</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toyota BRZ -->
+    <div class="car-card horizontal tech-spec-card">
+      <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=400" alt="Toyota BRZ">
+      <div class="car-info">
+        <h3>Toyota BRZ</h3>
+        <p class="price-tag">$46 / day</p>
+        <div class="features-tags">
+          <span>Audi S3 Premium Plus</span>
+          <span>AWD - Automatic</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audi S3 Premium Plus -->
+    <div class="car-card horizontal tech-spec-card">
+      <img src="https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?q=80&w=400" alt="Audi S3">
+      <div class="car-info">
+        <h3>Audi S3 Premium Plus</h3>
+        <p class="price-tag">$39 / day</p>
+        <div class="features-tags">
+          <span>Audi S3 Premium Plus</span>
+          <span>AWD - Automatic</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fiat 500 -->
+    <div class="car-card horizontal tech-spec-card">
+      <img src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?q=80&w=400" alt="Fiat 500">
+      <div class="car-info">
+        <h3>Fiat 500</h3>
+        <p class="price-tag">$64 / day</p>
+        <div class="features-tags">
+          <span>Fiat 500</span>
+          <span>AWD - Automatic</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="cta-content">
+    <h3>The largest car sharing & rental marketplace</h3>
+    <p>Drive your dream car down the stylish streets</p>
+    <a href="{% url 'all-cars' %}" class="btn big">Explore All Cars</a>
+  </div>
+</section>
+
+{% endblock %}

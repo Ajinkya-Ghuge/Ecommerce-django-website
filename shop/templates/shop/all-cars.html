@@ -1,0 +1,62 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}All Cars - ByDrive{% endblock %}
+
+{% block content %}
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <h1>All Cars</h1>
+  <div class="search-bar">
+    <form action="{% url 'search' %}" method="GET">
+      <i class="fas fa-search"></i>
+      <input type="text" name="q" placeholder="Enter car brand or model to search">
+      <button type="submit" class="btn">Search</button>
+    </form>
+  </div>
+</section>
+
+<!-- CATEGORY FILTER -->
+<section class="category-filter">
+  <div class="filter-tabs">
+    <a href="{% url 'all-cars' %}" class="filter-tab {% if not current_category %}active{% endif %}">All</a>
+    <a href="{% url 'category-cars' 'economy' %}" class="filter-tab">Economy</a>
+    <a href="{% url 'category-cars' 'exotic' %}" class="filter-tab">Exotic</a>
+    <a href="{% url 'category-cars' 'sport' %}" class="filter-tab">Sport</a>
+    <a href="{% url 'category-cars' 'luxury' %}" class="filter-tab">Luxury</a>
+    <a href="{% url 'category-cars' 'suv' %}" class="filter-tab">SUV</a>
+  </div>
+</section>
+
+<!-- ALL CARS GRID -->
+<section class="cars-section">
+  <div class="cars-grid large">
+    {% for car in cars %}
+    <div class="car-card horizontal">
+      <img src="{{ car.main_image }}" alt="{{ car.name }}">
+      <div class="car-info">
+        <h3>{{ car.brand.name }} {{ car.name }} ({{ car.model_year }})</h3>
+        <div class="car-specs">
+          <span><i class="fas fa-gas-pump"></i> {{ car.get_fuel_type_display }}</span>
+          <span><i class="fas fa-gear"></i> {{ car.get_transmission_display }}</span>
+          <span><i class="fas fa-car-side"></i> {{ car.get_drivetrain_display }}</span>
+          <span><i class="fas fa-chair"></i> {{ car.seats }} seats</span>
+        </div>
+        <div class="car-features">
+          {% for feature in car.get_features_list|slice:":3" %}
+          <span class="feature-tag">{{ feature|truncatechars:20 }}</span>
+          {% endfor %}
+        </div>
+        <div class="car-price">
+          <span class="price">${{ car.daily_price }} <small>/ day</small></span>
+          <a href="{% url 'car-detail' car.id %}" class="btn">View Details</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p class="no-cars">No cars found in this category.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

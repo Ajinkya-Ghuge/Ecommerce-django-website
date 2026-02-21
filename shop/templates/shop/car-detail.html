@@ -1,0 +1,167 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}{{ car.brand.name }} {{ car.name }} - ByDrive{% endblock %}
+
+{% block content %}
+
+<!-- CAR DETAIL HERO -->
+<section class="car-detail-hero">
+  <div class="car-detail-header">
+    <div class="car-title">
+      <h1>{{ car.brand.name }} {{ car.name }}</h1>
+      <div class="car-badges">
+        <span class="badge"><i class="fas fa-star"></i> {{ car.get_category_display }}</span>
+        <span class="badge"><i class="fas fa-calendar"></i> Model year {{ car.model_year }}</span>
+        <span class="badge"><i class="fas fa-car-side"></i> {{ car.get_drivetrain_display }}</span>
+      </div>
+    </div>
+    <a href="#" class="btn big">Book this Car <i class="fas fa-arrow-right"></i></a>
+  </div>
+
+  <div class="car-detail-gallery">
+    <div class="main-image">
+      <img src="{{ car.main_image }}" alt="{{ car.name }}">
+    </div>
+    <div class="thumbnail-grid">
+      {% if car.interior_image %}
+      <img src="{{ car.interior_image }}" alt="Interior">
+      {% endif %}
+      {% if car.exterior_image %}
+      <img src="{{ car.exterior_image }}" alt="Exterior">
+      {% endif %}
+      {% for image in car.additional_images.all|slice:":2" %}
+      <img src="{{ image.image_url }}" alt="{{ image.alt_text }}">
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CAR DETAIL CONTENT -->
+<section class="car-detail-content">
+  <div class="car-detail-left">
+    <!-- Overview -->
+    <div class="detail-section">
+      <h2>Overview</h2>
+      <div class="overview-text">
+        <p>{{ car.overview }}</p>
+      </div>
+    </div>
+
+    <!-- Technical Specs -->
+    <div class="detail-section">
+      <h2>Technical Specs</h2>
+      <div class="specs-grid">
+        <div class="spec-item">
+          <span class="spec-label">Drivetrain</span>
+          <span class="spec-value">{{ car.get_drivetrain_display }}</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Engine</span>
+          <span class="spec-value">{{ car.engine }}</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Power</span>
+          <span class="spec-value">{{ car.power }}</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Transmission</span>
+          <span class="spec-value">{{ car.get_transmission_display }}</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Fuel Type</span>
+          <span class="spec-value">{{ car.get_fuel_type_display }}</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Seats</span>
+          <span class="spec-value">{{ car.seats }} seats</span>
+        </div>
+        {% if car.consumption %}
+        <div class="spec-item">
+          <span class="spec-label">Consumption</span>
+          <span class="spec-value">{{ car.consumption }}</span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="detail-section">
+      <h2>Features</h2>
+      <ul class="features-list">
+        {% for feature in car.get_features_list %}
+        <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
+        {% empty %}
+        <li>No features listed</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Reviews -->
+    {% if reviews %}
+    <div class="detail-section">
+      <h2>Reviews</h2>
+      {% for review in reviews %}
+      <div class="review-item">
+        <div class="review-header">
+          <h4>{{ review.title }}</h4>
+          <span class="review-date">{{ review.date|date:"d F Y" }}</span>
+        </div>
+        <p>{{ review.content }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="car-detail-right">
+    <!-- Pricing Card -->
+    <div class="pricing-card">
+      <h3>{{ car.brand.name }} {{ car.name }}</h3>
+      {% if car.msrp_range %}
+      <div class="msrp">MSRP Range: {{ car.msrp_range }}</div>
+      {% endif %}
+      <hr>
+      <div class="rental-price">
+        <span class="price">${{ car.daily_price }} <small>/ day</small></span>
+        <a href="#" class="btn big full-width">Get a Quote</a>
+      </div>
+      {% if car.purchase_price %}
+      <p class="purchase-price">Or buy for ${{ car.purchase_price }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Quick Specs -->
+    <div class="quick-specs-card">
+      <h4>Quick Specs</h4>
+      <ul>
+        <li><i class="fas fa-chair"></i> {{ car.seats }} Seats</li>
+        <li><i class="fas fa-gas-pump"></i> {{ car.get_fuel_type_display }}</li>
+        <li><i class="fas fa-car-side"></i> {{ car.get_drivetrain_display }}</li>
+        <li><i class="fas fa-calendar"></i> {{ car.model_year }}</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SIMILAR CARS -->
+{% if similar_cars %}
+<section class="similar-cars-section">
+  <h2>Similar Cars</h2>
+  <div class="cars-grid">
+    {% for similar in similar_cars %}
+    <div class="car-card">
+      <img src="{{ similar.main_image }}" alt="{{ similar.name }}">
+      <div class="car-info">
+        <h3>{{ similar.brand.name }} {{ similar.name }}</h3>
+        <div class="car-price">
+          <span class="price">${{ similar.daily_price }} <small>/ day</small></span>
+          <a href="{% url 'car-detail' similar.id %}" class="btn-small">View</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

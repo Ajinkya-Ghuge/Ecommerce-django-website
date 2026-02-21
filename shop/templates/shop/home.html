@@ -1,22 +1,225 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Shop</title>
-</head>
-<body>
-    <h1>🛒 My E-commerce Store</h1>
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}Home - ByDrive{% endblock %}
 
-    <div style="display:flex; flex-wrap:wrap; gap:20px;">
-        {% for product in products %}
-            <div style="border:1px solid #ccc; padding:10px; width:200px;">
-                <h3>{{ product.name }}</h3>
-                <p>₹ {{ product.price }}</p>
-                <p>{{ product.description }}</p>
-                <img src="{{ product.image.url }}" width="150">
-                <br><br>
-                <button>Add to Cart</button>
-            </div>
-        {% endfor %}
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="small-title">Best Selling Cars</p>
+    <h1>{% if bestselling_car %}{{ bestselling_car.brand.name }} {{ bestselling_car.name }}{% else %}Mercedes-Benz CLA250{% endif %}</h1>
+    <a href="{% if bestselling_car %}{% url 'technical-specs' bestselling_car.id %}{% else %}#{% endif %}" class="btn big">See All Specifications</a>
+  </div>
+
+  <div class="hero-right">
+    <img
+      class="hero-car"
+      src="{% if bestselling_car %}{{ bestselling_car.main_image }}{% else %}https://images.unsplash.com/photo-1619767886558-efdc7b9b7b7e?q=80&w=1400{% endif %}"
+      alt="{% if bestselling_car %}{{ bestselling_car.name }}{% else %}Mercedes{% endif %}"
+    />
+
+    <div class="price-badge">
+      <strong>{% if bestselling_car %}${{ bestselling_car.purchase_price|default:'39,000' }}{% else %}$39,000{% endif %}</strong>
+      <span>Starting from</span>
     </div>
-</body>
-</html>
+  </div>
+</section>
+
+<!-- BRANDS SECTION -->
+<section class="brands">
+  {% for brand in brands %}
+  <span><i class="fas fa-car"></i> {{ brand.name }}</span>
+  {% empty %}
+  <span>Mercedes</span>
+  <span>BMW</span>
+  <span>Audi</span>
+  <span>Toyota</span>
+  <span>Lexus</span>
+  {% endfor %}
+</section>
+
+
+<!-- Add this after brands section but before cars-section -->
+
+<!-- CATEGORIES SECTION -->
+<section class="categories-section">
+  <h2>Browse by Category</h2>
+  <div class="categories-grid">
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-car"></i></div>
+      <h3>Economy Cars</h3>
+      <p>16 Cars</p>
+      <a href="#" class="btn-outline">Book This Car</a>
+    </div>
+    
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-rocket"></i></div>
+      <h3>Exotic Cars</h3>
+      <p>8 Cars</p>
+      <a href="#" class="btn-outline">Explore Our Fleet</a>
+    </div>
+    
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-gauge-high"></i></div>
+      <h3>Sport Cars</h3>
+      <p>16 Cars</p>
+      <a href="#" class="btn-outline">Explore Our Fleet</a>
+    </div>
+    
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-crown"></i></div>
+      <h3>Luxury Cars</h3>
+      <p>24 Cars</p>
+      <a href="#" class="btn-outline">Explore Our Fleet</a>
+    </div>
+    
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-truck"></i></div>
+      <h3>SUV's</h3>
+      <p>9 Cars</p>
+      <a href="#" class="btn-outline">Explore Our Fleet</a>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS SECTION -->
+<section class="reviews-section">
+  <div class="section-header">
+    <h2>Latest Reviews</h2>
+    <a href="#" class="view-all">All Reviews <i class="fas fa-arrow-right"></i></a>
+  </div>
+  
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-date">17 July 2023</div>
+      <h3>Ford Focus ST</h3>
+      <p>A big-hearted engine in an otherwise sensible car. The perfect seven-tenths hot hatch launched in 2023.</p>
+      <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="review-card">
+      <div class="review-date">19 July 2023</div>
+      <h3>Skoda Octavia VRS</h3>
+      <p>The Skoda Octavia VRS balances fun and livability just as sweetly as ever first full-strength performance car.</p>
+      <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="review-card">
+      <div class="review-date">23 July 2023</div>
+      <h3>Honda Civic Type R</h3>
+      <p>The Civic Type R can function as your only car, yet is as thrilling as most bespoke sports cars. Stunning to drive.</p>
+      <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="review-card">
+      <div class="review-date">26 August 2023</div>
+      <h3>Volkswagen Golf GTI</h3>
+      <p>Eighth GTI is usefully cleverer in the corners, but much too clever for its own good inside.</p>
+      <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED CARS SECTION -->
+<section class="cars-section">
+  <div class="section-header">
+    <h2>Explore Our Fleet</h2>
+    <a href="{% url 'all-cars' %}" class="view-all">View All Cars <i class="fas fa-arrow-right"></i></a>
+  </div>
+
+  <div class="cars-grid">
+    {% for car in featured_cars %}
+    <div class="car-card">
+      <img src="{{ car.main_image }}" alt="{{ car.name }}">
+      <div class="car-info">
+        <h3>{{ car.brand.name }} {{ car.name }}</h3>
+        <div class="car-specs">
+          <span><i class="fas fa-calendar"></i> {{ car.model_year }}</span>
+          <span><i class="fas fa-chair"></i> {{ car.seats }} seats</span>
+          <span><i class="fas fa-car-side"></i> {{ car.get_drivetrain_display }}</span>
+        </div>
+        <div class="car-price">
+          <span class="price">${{ car.daily_price }} <small>/ day</small></span>
+          <a href="{% url 'car-detail' car.id %}" class="btn-small">Book Now</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p class="no-cars">No cars available yet. Add some in the admin panel.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- CATEGORIES SECTION -->
+<section class="categories-section">
+  <h2>Browse by Category</h2>
+  <div class="categories-grid">
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-car"></i></div>
+      <h3>Economy Cars</h3>
+      <p>{{ economy_count|default:0 }} Cars</p>
+      <a href="{% url 'category-cars' 'economy' %}" class="btn-outline">Book This Car</a>
+    </div>
+    
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-rocket"></i></div>
+      <h3>Exotic Cars</h3>
+      <p>{{ exotic_count|default:0 }} Cars</p>
+      <a href="{% url 'category-cars' 'exotic' %}" class="btn-outline">Explore Our Fleet</a>
+    </div>
+    
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-gauge-high"></i></div>
+      <h3>Sport Cars</h3>
+      <p>{{ sport_count|default:0 }} Cars</p>
+      <a href="{% url 'category-cars' 'sport' %}" class="btn-outline">Explore Our Fleet</a>
+    </div>
+    
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-crown"></i></div>
+      <h3>Luxury Cars</h3>
+      <p>{{ luxury_count|default:0 }} Cars</p>
+      <a href="{% url 'category-cars' 'luxury' %}" class="btn-outline">Explore Our Fleet</a>
+    </div>
+    
+    <div class="category-card">
+      <div class="category-icon"><i class="fas fa-truck"></i></div>
+      <h3>SUV's</h3>
+      <p>{{ suv_count|default:0 }} Cars</p>
+      <a href="{% url 'category-cars' 'suv' %}" class="btn-outline">Explore Our Fleet</a>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST REVIEWS SECTION -->
+<section class="reviews-section">
+  <div class="section-header">
+    <h2>Latest Reviews</h2>
+    <a href="#" class="view-all">All Reviews <i class="fas fa-arrow-right"></i></a>
+  </div>
+  
+  <div class="reviews-grid">
+    {% for review in latest_reviews %}
+    <div class="review-card">
+      <div class="review-date">{{ review.date|date:"d F Y" }}</div>
+      <h3>{{ review.car.brand.name }} {{ review.car.name }}</h3>
+      <p>{{ review.content|truncatewords:20 }}</p>
+      <a href="{% url 'car-detail' review.car.id %}" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+    </div>
+    {% empty %}
+    <p>No reviews yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section">
+  <div class="cta-content">
+    <h2>The largest car sharing & rental marketplace</h2>
+    <p>Drive your dream car down the stylish streets</p>
+    <a href="{% url 'all-cars' %}" class="btn big">Explore All Cars</a>
+  </div>
+</section>
+
+{% endblock %}

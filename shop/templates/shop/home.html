@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Shop</title>
+</head>
+<body>
+    <h1>🛒 My E-commerce Store</h1>
+
+    <div style="display:flex; flex-wrap:wrap; gap:20px;">
+        {% for product in products %}
+            <div style="border:1px solid #ccc; padding:10px; width:200px;">
+                <h3>{{ product.name }}</h3>
+                <p>₹ {{ product.price }}</p>
+                <p>{{ product.description }}</p>
+                <img src="{{ product.image.url }}" width="150">
+                <br><br>
+                <button>Add to Cart</button>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -17,8 +17,16 @@
   <nav class="navbar">
     <div class="nav-container">
       <div class="logo">
-        <i class="fas fa-car" style="margin-right: 8px;"></i> bydrive
+        <a href="{% url 'home' %}" style="color: inherit; text-decoration: none;">
+          <i class="fas fa-car" style="margin-right: 8px;"></i> bydrive
+        </a>
       </div>
+      
+      <!-- Mobile Menu Button (Hamburger) -->
+      <button class="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      
       <ul class="nav-links">
         <li><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'all-cars' %}">All Cars</a></li>
@@ -26,10 +34,37 @@
         <li><a href="#">Reviews</a></li>
         <li><a href="#">Contact Us</a></li>
         <li><a href="#">All Pages</a></li>
+        
+        <!-- CART ICON WITH COUNT -->
+        <li class="cart-icon">
+          <a href="{% url 'cart_view' %}" class="cart-link">
+            <i class="fas fa-shopping-cart"></i>
+            {% if request.session.cart %}
+              {% with cart_count=request.session.cart|length %}
+                {% if cart_count > 0 %}
+                  <span class="cart-count">{{ cart_count }}</span>
+                {% endif %}
+              {% endwith %}
+            {% endif %}
+          </a>
+        </li>
+        
         <li><a href="#" class="btn">Get this theme</a></li>
       </ul>
     </div>
   </nav>
+
+  <!-- MESSAGE DISPLAY SECTION (for flash messages) -->
+  {% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible">
+        <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
 
   {% block content %}{% endblock %}
 
@@ -52,11 +87,11 @@
       <div class="footer-section">
         <h4>Car Categories</h4>
         <ul>
-          <li><a href="#">Economy Cars</a></li>
-          <li><a href="#">Exotic Cars</a></li>
-          <li><a href="#">Sport Cars</a></li>
-          <li><a href="#">Luxury Cars</a></li>
-          <li><a href="#">SUV's</a></li>
+          <li><a href="{% url 'category-cars' 'economy' %}">Economy Cars</a></li>
+          <li><a href="{% url 'category-cars' 'exotic' %}">Exotic Cars</a></li>
+          <li><a href="{% url 'category-cars' 'sport' %}">Sport Cars</a></li>
+          <li><a href="{% url 'category-cars' 'luxury' %}">Luxury Cars</a></li>
+          <li><a href="{% url 'category-cars' 'suv' %}">SUV's</a></li>
         </ul>
       </div>
       <div class="footer-section">
@@ -75,5 +110,19 @@
   </footer>
 
   <script src="{% static 'shop/js/main.js' %}"></script>
+  
+  <!-- Additional script for messages auto-hide -->
+  <script>
+    // Auto-hide messages after 3 seconds
+    setTimeout(function() {
+      var alerts = document.querySelectorAll('.alert');
+      alerts.forEach(function(alert) {
+        alert.style.opacity = '0';
+        setTimeout(function() {
+          alert.style.display = 'none';
+        }, 300);
+      });
+    }, 3000);
+  </script>
 </body>
 </html>

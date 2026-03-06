@@ -49,7 +49,12 @@
         </div>
         <div class="car-price">
           <span class="price">${{ car.daily_price }} <small>/ day</small></span>
-          <a href="{% url 'car-detail' car.id %}" class="btn">View Details</a>
+          <div class="card-buttons">
+            <a href="{% url 'car-detail' car.id %}" class="btn-small">View Details</a>
+            <a href="{% url 'cart_add' car.id %}" class="btn-small cart-btn" onclick="return confirmAddToCart('{{ car.brand.name }} {{ car.name }}')">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -58,5 +63,12 @@
     {% endfor %}
   </div>
 </section>
+
+<!-- Add this small JavaScript for confirmation (optional) -->
+<script>
+  function confirmAddToCart(carName) {
+    return confirm(`Add ${carName} to your cart?`);
+  }
+</script>
 
 {% endblock %}
